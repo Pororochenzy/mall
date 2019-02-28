@@ -24,6 +24,19 @@ func init() {
 	beego.Router("/goods/userCenterOrder",&controllers.UserController{},"get:ShowUserCenterOrder")
 	//用户中心地址
 	beego.Router("/goods/userCenterSite",&controllers.UserController{},"get:ShowUserCenterSite;post:HandleSite")
+	//支付宝
+	beego.Router("/alipay",&controllers.GoodsController{},"get:HandleAlipay")
+	//支付成功
+	//beego.Router("/payok",&controllers.GoodsController{},"get:PayOk")
+	//发短信
+	beego.Router("/sendMsg",&controllers.GoodsController{},"get:SendMsg")
+	//商品详情页
+	beego.Router("/goodsDetail",&controllers.GoodsController{},"get:ShowDetail")
+	//列表页展示
+	beego.Router("/goodsList",&controllers.GoodsController{},"get:ShowGoodsList")
+	//搜索功能
+	beego.Router("/searchGoods",&controllers.GoodsController{},"post:HandleSearch")
+
 }
 
 func FilterFunc(ctx *context.Context)  {

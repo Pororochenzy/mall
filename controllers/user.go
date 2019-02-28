@@ -7,6 +7,8 @@ import (
 	"dailyFresh/models"
 	"github.com/astaxie/beego/utils"
 	"strconv"
+
+	"github.com/gomodule/redigo/redis"
 )
 
 type UserController struct {
@@ -184,6 +186,26 @@ func(this*UserController)Logout() {
 
 //用户中心信息
 func(this*UserController)ShowUserCenterInfo(){
+	userName := this.GetSession("userName")
+	if userName != nil {
+		//获取历史浏览记录
+		o:=orm.NewOrm()
+		//查询用户信息
+		var user models.User
+		user.UserName = userName.(string)
+		o.Read(&user,"UserName")
+		var goods []models.GoodsSKU
+		conn,_ :=redis.Dial("tcp",":6379")
+		reply,err := conn.Do("lrange","history"+strconv.Itoa(user.Id),0,4)
+		replyInts,_ := redis.Ints(reply,err)
+		for _,val := range replyInts{
+			var temp models.GoodsSKU
+			o.QueryTable("GoodsSKU").Filter("Id",val).One(&temp)
+			goods = append(goods, temp)
+		}
+		this.Data["goods"] = goods
+	}
+
 	this.Layout="layout.html"
 	this.TplName="user_center_info.html"
 }

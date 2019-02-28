@@ -42,8 +42,10 @@
 	<div class="search_bar clearfix">
 		<a href="index.html" class="logo fl"><img src="/static/images/logo.png"></a>
 		<div class="search_con fl">
-			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
-			<input type="button" class="input_btn fr" name="" value="搜索">
+            <form method="post" action="/searchGoods">
+				<input type="text" class="input_text fl" name="goodsName" placeholder="搜索商品">
+				<input type="button" class="input_btn fr" name="" value="搜索">
+            </form>
 		</div>
 		<div class="guest_cart fr">
 			<a href="#" class="cart_name fl">我的购物车</a>
@@ -66,69 +68,66 @@
 
 	<div class="center_con clearfix">
 		<ul class="subnav fl">
-			<li><a href="#model01" class="fruit">新鲜水果</a></li>
-			<li><a href="#model02" class="seafood">海鲜水产</a></li>
-			<li><a href="#model03" class="meet">猪牛羊肉</a></li>
-			<li><a href="#model04" class="egg">禽类蛋品</a></li>
-			<li><a href="#model05" class="vegetables">新鲜蔬菜</a></li>
-			<li><a href="#model06" class="ice">速冻食品</a></li>
+            <!--------循环展示类型数据---------->
+			<!--<li><a href="#model01" class="fruit">新鲜水果</a></li> -->
+		{{range .types}}
+            <li><a href="" class="{{.Logo}}">{{.Name}}</a></li>
+		{{end}}
+
 		</ul>
 		<div class="slide fl">
 			<ul class="slide_pics">
-				<li><img src="/static/images/slide.jpg" alt="幻灯片"></li>
-				<li><img src="/static/images/slide02.jpg" alt="幻灯片"></li>
-				<li><img src="/static/images/slide03.jpg" alt="幻灯片"></li>
-				<li><img src="/static/images/slide04.jpg" alt="幻灯片"></li>
+                <!--------循环展示轮播图---------->
+			{{range .goodsBanners}}
+                <li><img src="http://192.168.42.142:8888/{{.Image}}" alt="幻灯片"></li>
+			{{end}}
+
 			</ul>
 			<div class="prev"></div>
 			<div class="next"></div>
 			<ul class="points"></ul>
 		</div>
 		<div class="adv fl">
-			<a href="#"><img src="/static/images/adv01.jpg"></a>
-			<a href="#"><img src="/static/images/adv02.jpg"></a>
+            <!--------循环展示促销商品数据---------->
+		{{range .proBanner}}
+            <a href="{{.Url}}"><img src="http://192.168.42.142:8888/{{.Image}}"></a>
+		{{end}}
 		</div>
 	</div>
 
+    <!--------循环展示首页商品---------->
+{{range .goods}}
 	<div class="list_model">
 		<div class="list_title clearfix">
-			<h3 class="fl" id="model01">新鲜水果</h3>
+			<h3 class="fl" id="model01">{{.type.Name}}</h3>
 			<div class="subtitle fl">
 				<span>|</span>
-				<a href="#">鲜芒</a>
-				<a href="#">加州提子</a>
-				<a href="#">亚马逊牛油果</a>
+                <!--------循环展示文字商品数据---------->
+			{{range .goodsText}}
+                <a href="">{{.GoodsSKU.Name}}</a>
+			{{end}}
+
 			</div>
 			<a href="#" class="goods_more fr" id="fruit_more">查看更多 ></a>
 		</div>
 
 		<div class="goods_con clearfix">
-			<div class="goods_banner fl"><img src="/static/images/banner01.jpg"></div>
+			<!--select * from goods_type;  图片路径上传那边还没写正确 -->
+			<div class="goods_banner fl"><img src="http://192.168.42.142:8888/{{.type.Image}}"></div>
 			<ul class="goods_list fl">
-				<li>
-					<h4><a href="#">草莓</a></h4>
-					<a href="#"><img src="/static/images/goods/goods003.jpg"></a>
-					<div class="prize">¥ 30.00</div>
-				</li>
-				<li>
-					<h4><a href="#">葡萄</a></h4>
-					<a href="#"><img src="/static/images/goods/goods002.jpg"></a>
-					<div class="prize">¥ 5.50</div>
-				</li>
-				<li>
-					<h4><a href="#">柠檬</a></h4>
-					<a href="#"><img src="/static/images/goods/goods001.jpg"></a>
-					<div class="prize">¥ 3.90</div>
-				</li>
-				<li>
-					<h4><a href="#">奇异果</a></h4>
-					<a href="#"><img src="/static/images/goods/goods012.jpg"></a>
-					<div class="prize">¥ 25.80</div>
-				</li>
+                <!--------循环展示图片商品数据---------->
+			{{range .goodsImage}}
+                <li>
+                    <h4><a href="">{{.GoodsSKU.Name}}</a></h4>
+                    <a href=""><img src="http://192.168.42.142:8888/{{.GoodsSKU.Image}}"></a>
+                    <div class="prize">¥ {{.GoodsSKU.Price}}</div>
+                </li>
+			{{end}}
 			</ul>
 		</div>
 	</div>
-
+{{end}}
+	<!--
 	<div class="list_model">
 		<div class="list_title clearfix">
 			<h3 class="fl" id="model02">海鲜水产</h3>
@@ -223,22 +222,22 @@
 			<ul class="goods_list fl">
 				<li>
 					<h4><a href="#">维多利亚葡萄维多利亚葡萄维多利亚葡萄维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 				<li>
 					<h4><a href="#">维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 				<li>
 					<h4><a href="#">维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 				<li>
 					<h4><a href="#">维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 			</ul>
@@ -258,26 +257,26 @@
 		</div>
 
 		<div class="goods_con clearfix">
-			<div class="goods_banner fl"><img src="images/banner05.jpg"></div>
+			<div class="goods_banner fl"><img src="/static/images/banner05.jpg"></div>
 			<ul class="goods_list fl">
 				<li>
 					<h4><a href="#">维多利亚葡萄维多利亚葡萄维多利亚葡萄维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 				<li>
 					<h4><a href="#">维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 				<li>
 					<h4><a href="#">维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 				<li>
 					<h4><a href="#">维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 			</ul>
@@ -297,32 +296,32 @@
 		</div>
 
 		<div class="goods_con clearfix">
-			<div class="goods_banner fl"><img src="images/banner06.jpg"></div>
+			<div class="goods_banner fl"><img src="/static/images/banner06.jpg"></div>
 			<ul class="goods_list fl">
 				<li>
 					<h4><a href="#">维多利亚葡萄维多利亚葡萄维多利亚葡萄维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 				<li>
 					<h4><a href="#">维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 				<li>
 					<h4><a href="#">维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 				<li>
 					<h4><a href="#">维多利亚葡萄</a></h4>
-					<a href="#"><img src="images/goods.jpg"></a>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
 					<div class="prize">¥ 38.00</div>
 				</li>
 			</ul>
 		</div>
 	</div>
-
+   -->
 	<div class="footer">
 		<div class="foot_link">
 			<a href="#">关于我们</a>
@@ -336,7 +335,7 @@
 		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
 		<p>电话：010-****888    京ICP备*******8号</p>
 	</div>
-	<script type="text/javascript" src="/static/js/slideshow.js"></script>
+	<script type="text/javascript" src="/static/js/slide.js"></script>
 	<script type="text/javascript">
 		BCSlideshow('focuspic');
 		var oFruit = document.getElementById('fruit_more');
